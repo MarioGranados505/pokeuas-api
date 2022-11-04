@@ -8,31 +8,41 @@ import {
   Code,
   Grid,
   theme,
+  Image,
 } from "@chakra-ui/react"
 import { ColorModeSwitcher } from "./ColorModeSwitcher"
 import { Logo } from "./Logo"
+import { useEffect, useState } from "react"
+
+const POKE_API_URL = "https://pokeapi.co/api/v2";
+const KANTO_POKEMONS_URL = `${POKE_API_URL}/pokemon?limit=151`;
 
 export const App = () => (
+
+  const [pokemons, setPokemons] = useState<any[]>([]);
+
+  const fetchOnePokemonMetaData = async (url: string) => {
+    return (await fetch(url)).json();
+  };
+
+  const getPokemons = React.useCallback(async () => {
+    const response = await (await fetch(KANTO_POKEMONS_URL)).json();
+
+    const tmp = [];
+
+    for (const { url } of response.results){
+      const pokemon = await fetchOnePokemonMetaData(url);
+      tmp.push(pokemon);
+    }
+
+    setPokemons(tmp);
+  }, []);
+
+  useEffect(() => {
+    getPokemons();
+  }, [getPokemons]);
+
   <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
-    </Box>
+    
   </ChakraProvider>
 )
