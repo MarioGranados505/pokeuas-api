@@ -9,6 +9,7 @@ import {
   Grid,
   theme,
   Image,
+  Center,
 } from "@chakra-ui/react"
 import { ColorModeSwitcher } from "./ColorModeSwitcher"
 import { Logo } from "./Logo"
@@ -42,7 +43,13 @@ export const App = () => (
     getPokemons();
   }, [getPokemons]);
 
+  console.log(pokemons);
+
   <ChakraProvider theme={theme}>
-    
+    <Center>
+      <Box>
+        
+      </Box>
+    </Center>
   </ChakraProvider>
 )
